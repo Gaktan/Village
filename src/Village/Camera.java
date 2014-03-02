@@ -5,20 +5,11 @@ import static org.lwjgl.opengl.GL11.glTranslatef;
 
 public class Camera extends Entity{
 	
-	private float height = 800;
-	private float length = 600;
-	
 	public Camera(){
 		this.setX(0);
 		this.setY(0);
-	}
-	
-	public float getHeight() {
-		return height;
-	}
-
-	public float getLength() {
-		return length;
+		setLength(800);
+		setHeight(600);
 	}
 
 	public void update(float dt){
@@ -31,25 +22,15 @@ public class Camera extends Entity{
 	}
 	
 	public Point camPos(){
-		return new Point(length + getX(), getHeight() + getY());
+		return new Point(getLength() + getX(), getHeight() + getY());
 	}
 
 	public float getxCenter() {
-		return getX() + 400;
+		return getX() + 300;
 	}
 
 	public float getyCenter() {
-		return getY() + 300;
+		return getY() + 400;
 	}
-
-	public void setHeight(float height) {
-		this.height = height;
-	}
-
-	public void setLength(float length) {
-		this.length = length;
-	}
-
-	
 }
  

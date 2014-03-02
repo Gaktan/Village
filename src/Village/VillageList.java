@@ -22,6 +22,7 @@ public class VillageList {
 	public void addVillage(Village v){
 		list.add(v);
 		v.setOwner(this);
+		v.render();
 	}
 	
 	public void remVillage(Village v){
@@ -43,15 +44,18 @@ public class VillageList {
 				temp.add(v);
 			}
 			
-			if(v.isGrowing()){
-				for(Village v2 : list){
-					if(v != v2){
-						if(v.collide(v2)){
-							v.setGrowing(false);
-							v2.setGrowing(false);
-						}
+			boolean collide = false;
+			for(Village v2 : list){
+				if(v != v2){
+					if(v.collide(v2)){
+						v.setGrowing(false);
+						v2.setGrowing(false);
+						collide = true;
 					}
 				}
+			}
+			if(!collide){
+				v.setGrowing(true);
 			}
 		}
 		if(!temp.isEmpty()){
@@ -105,7 +109,4 @@ public class VillageList {
 	public void setList(List<Village> list) {
 		this.list = list;
 	}
-	
-	
-	
 }

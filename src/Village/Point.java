@@ -19,7 +19,7 @@ public class Point {
 	 public void AddVectorY(float f){
 		 y = y + f;
 	 }
-	 public static Vector minus(Point a, Point b){	//Calculates vector v from b to a
+	 public static Vector bToA(Point a, Point b){	//Calculates vector v from b to a
 		Vector v = new Vector();
 		
 		v.setX(a.x - b.x);

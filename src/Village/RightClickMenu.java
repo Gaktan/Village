@@ -44,11 +44,9 @@ public class RightClickMenu extends Entity{
 	}
 
 	public void whichCollide(Entity mousePos){
-		Option buff = null;
 		for(Option o : options){
 			if(mousePos.collide(o)){
 				o.exec();
-				buff = o;
 			}
 		}
 	}
@@ -80,25 +78,40 @@ public class RightClickMenu extends Entity{
 		}
 		
 		public void exec(){
-			if(name.equals("Create Village")){
-				Color c = new Color((float)Math.random(), (float)Math.random(), (float)Math.random());
+			if(name.equals("Create Village")){	
 				
-				String name = Random.randName();
-				while(Main.villageList.sameName(name)){
-					System.out.println("It had same");
-					name = Random.randName();
+				Entity e = owner;
+				float height = owner.getHeight();
+				float length = owner.getLength();
+				e.setHeight(20); e.setLength(20);
+				boolean collide = false;
+				for(Village v : Main.villageList.getList()){
+					if(e.collide(v)){
+						collide = true;
+						break;
+					}
 				}
+				e.setHeight(height); e.setLength(length);
 				
-				Village v = new Village(owner.getX(), owner.getY(), name, c);
-				v.populate(50);
-				Main.villageList.addVillage(v);
+				if(!collide){
+					String name = Random.randName();
+					while(Main.villageList.sameName(name)){
+						name = Random.randName();
+					}
+					Color c = new Color((float)Math.random(), (float)Math.random(), (float)Math.random());
+					Village v = new Village(owner.getX(), owner.getY(), name, c);
+					v.populate(50);
+					Main.villageList.addVillage(v);
+				}
+				else
+					System.out.println("Cannot place a village here");
+
 			}
 			if(name.equals("Remove Village")){
 				Village temp = null;
 				Entity e = owner;
 				float height = owner.getHeight();
 				float length = owner.getLength();
-				e.setColor(Color.blue);
 				e.setHeight(1); e.setLength(1);
 				for(Village v : Main.villageList.getList()){
 					if(e.collide(v)){

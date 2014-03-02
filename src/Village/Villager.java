@@ -12,7 +12,11 @@ public class Villager extends Entity{
 	private int babyCoolDown;
 	private static final int MAX_BABIES = 3;
 	private int kids;
-	private final float MAX_VELOCITY = 0.02f;
+	private final float MAX_VELOCITY = 0.002f;
+	private int timeToMove;
+	
+	private Point destination;
+	private boolean arrived;
 	
 	public Villager() {
 		this(new Point(0, 0), true);
@@ -25,13 +29,17 @@ public class Villager extends Entity{
 	public Villager(Point position, boolean dude) {
 		//size = 3
 		super(position, 3,3, true, true);
+		/*
 		setvX(Random.randFloat(-MAX_VELOCITY, MAX_VELOCITY));
 		setvY(Random.randFloat(-MAX_VELOCITY, MAX_VELOCITY));
+		*/
 		health = 0 + (int) (Math.random() * (50 - 0));		//between 0 & 50 yo
 		mom = null;
 		village = null;
 		this.dude = dude;
 		kids = 0;
+		arrived = false;
+		
 		if(!dude){
 			babyCoolDown = 0 + (int) (Math.random() * (10 - 0));
 			this.setColor(new Color(Color.pink));
@@ -41,10 +49,9 @@ public class Villager extends Entity{
 			this.setColor(new Color(0, 0.5f, 1));
 		}
 		
-		int rand = (int) (Math.random() * 2);
-		if(rand == 1){
-			setRender(false);
-		}
+		boolean rand = Random.randBool();
+		setRender(rand);
+		setMoving(rand);
 
 	}
 	
@@ -80,9 +87,29 @@ public class Villager extends Entity{
 	
 
 	public void update(float delta) {
+		timeToMove--;
 		if(isMoving()){
 			super.update(delta);
 		}
+		int diff = 10;
+		Entity e = new Entity(destination, diff, diff, false, false);
+		if(collide(e) || timeToMove == 0){
+			arrived = true;
+		}
+		
+		if(getvX() > MAX_VELOCITY){
+			setvX(MAX_VELOCITY);
+		}
+		if(getvX() < -MAX_VELOCITY){
+			setvX(-MAX_VELOCITY);
+		}
+		if(getvY() > MAX_VELOCITY){
+			setvY(MAX_VELOCITY);
+		}
+		if(getvY() < -MAX_VELOCITY){
+			setvY(-MAX_VELOCITY);
+		}
+
 		if(getX() + getLength() > village.getX() + village.getLength()){
 			setX(village.getX() + village.getLength() - getLength());
 			setvX(Random.randFloat(-MAX_VELOCITY, 0));
@@ -148,4 +175,35 @@ public class Villager extends Entity{
 	public void setKids(int kids) {
 		this.kids = kids;
 	}
+
+	public Point getDestination() {
+		return destination;
+	}
+
+	public void setDestination(Point destination) {
+		this.destination = destination;
+	}
+
+	public boolean isArrived() {
+		return arrived;
+	}
+
+	public void setArrived(boolean arrived) {
+		this.arrived = arrived;
+	}
+
+	public float getMAX_VELOCITY() {
+		return MAX_VELOCITY;
+	}
+
+	public int getTimeToMove() {
+		return timeToMove;
+	}
+
+	public void setTimeToMove(int timeToMove) {
+		this.timeToMove = timeToMove;
+	}
+	
+	
+	
 }

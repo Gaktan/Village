@@ -53,6 +53,8 @@ public class Village extends Entity{
 		}
 		else
 			growing = false;
+
+		destination(v);
 	}
 	
 	public void remVillager(Villager v){
@@ -63,8 +65,8 @@ public class Village extends Entity{
 	
 	public void render(Camera cam){
 		for(Villager v : villagerList){
-			if((v.getX() > cam.getX()) && (v.getX() < cam.getX() + cam.getHeight())){
-				if((v.getY() > cam.getY()) && (v.getY() < cam.getY() + cam.getLength())){
+			if((v.getX() > cam.getX()) && (v.getX() < cam.getX() + cam.getLength())){
+				if((v.getY() > cam.getY()) && (v.getY() < cam.getY() + cam.getHeight())){
 					v.render();
 				}
 			}
@@ -81,6 +83,9 @@ public class Village extends Entity{
 	
 	public void update(float delta){
 		for(Villager v : villagerList){
+			if(v.isArrived()){
+				destination(v);
+			}
 			v.update(delta);
 		}
 	}
@@ -157,18 +162,22 @@ public class Village extends Entity{
 
 	}
 	
-	public Point randomCoordInVillage(){
-		float minX = getX();
-		float minY = getY();
-		float maxX = getX() + getSize();
-		float maxY = getY() + getSize();
-		
-		float x = minX + (float)(Math.random() * (maxX - minX));
-		float y = minY + (float)(Math.random() * (maxY - minY));
+	public Point randomCoordInVillage(){		
+		float x = Random.randFloat(getX(), getX() + getLength());
+		float y = Random.randFloat(getY(), getY() + getHeight());
 		
 		return new Point(x, y);
 	}
 	
+	public void destination(Villager v){
+		
+		v.setDestination(randomCoordInVillage());
+		Vector a = Point.bToA(v.getDestination(), v.getPosition());
+		a.setX(a.getX() * v.getMAX_VELOCITY());
+		a.setY(a.getY() * v.getMAX_VELOCITY());
+		v.setVelocity(a);
+		v.setTimeToMove(600);
+	}
 	
 	
 	

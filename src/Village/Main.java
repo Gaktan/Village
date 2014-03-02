@@ -22,6 +22,7 @@ public class Main {
 	private static Font[] awtFont = new Font[2];
 	
 	public static boolean rMenu;
+	public static boolean speed = false;	//Set to false for normal speed
 	public static RightClickMenu menu;
 	public static Point mousePos;
 	
@@ -70,7 +71,6 @@ public class Main {
 	long lastLoopTime = System.nanoTime();
 	final int TARGET_FPS = 900;
 	final long OPTIMAL_TIME = 1000000000 / TARGET_FPS;	//1000000000
-	boolean speed = true;
 	
 	Village vallon = new Village(20, 20, "Vallon sur gée", Color.red);
 	Village loue = new Village(20, 350, "Loué", Color.green);

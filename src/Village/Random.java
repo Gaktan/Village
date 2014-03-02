@@ -1,6 +1,5 @@
 package Village;
 
-
 public class Random {
 
 	public static String randName(){

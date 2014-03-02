@@ -31,7 +31,11 @@ public class Controls {
 		        	camera.setvY(camSpeed);
 		        }
 		        if(Keyboard.getEventKey() == Keyboard.KEY_ESCAPE){
+		        	System.out.println("Stopping process...");
 		        	System.exit(0);
+		        }
+		        if(Keyboard.getEventKey() == Keyboard.KEY_SPACE){
+		        	Main.speed = true;
 		        }
 		        if(Keyboard.getEventKey() == Keyboard.KEY_RETURN){
 //		        	Main.loue.clear();
@@ -41,15 +45,13 @@ public class Controls {
 		        if(Keyboard.getEventKey() == Keyboard.KEY_A){
 		        	if(display){
 		        		Main.villageList.setDisplayNames(false);
-		        		System.out.println(display);
 		        		
 		        	}
 		        	if(!display){
 		        		Main.villageList.setDisplayNames(true);
-		        		System.out.println(display);
 		        	}
+		        	 display = !display;
 		        }
-		        display = !display;
 		    }
 		    else {
 		        if (Keyboard.getEventKey() == Keyboard.KEY_RIGHT){
@@ -64,6 +66,9 @@ public class Controls {
 		        if (Keyboard.getEventKey() == Keyboard.KEY_DOWN){
 		        	camera.setvY(0);
 		        }
+		        if(Keyboard.getEventKey() == Keyboard.KEY_SPACE){
+		        	Main.speed = false;
+		        }
 		    }
 		}
 		while(Mouse.next()){
@@ -77,9 +82,8 @@ public class Controls {
 					Entity e = new Entity(getMousePos(camera), 1, 1, false, false);
 					if(e.collide(Main.menu)){
 						Main.menu.whichCollide(e);
-						
-						Main.rMenu = false;
 					}
+					Main.rMenu = false;
 				}
 			}
 			
@@ -120,6 +124,14 @@ public class Controls {
 	        	glTranslated(-camera.getX(), -camera.getY(), -1);
 	        	
 	        	//glTranslatef(oldPos.getX(), oldPos.getY(), 0);
+	        	if(camera.getvY() > 0)
+	        		camera.setvY(camSpeed);
+	        	if(camera.getvY() < 0)
+	        		camera.setvY(-camSpeed);
+	        	if(camera.getvX() > 0)
+	        		camera.setvX(camSpeed);
+	        	if(camera.getvX() < 0)
+	        		camera.setvX(-camSpeed);
 	        }
 		}
 	}
@@ -133,7 +145,7 @@ public class Controls {
 		x = camera.getLength() * xToScale;
 		y = camera.getHeight() * yToScale;
 		
-		y = camera.getHeight() + y -(200/scale);
+		y = camera.getLength() + y -(200/scale);
 
 		return new Point(x, y);
 	}
