@@ -12,6 +12,7 @@ import Village.RightClickMenu.Option;
 
 import static org.lwjgl.opengl.GL11.*;
 
+
 public class Main {
 	public static boolean GameRunning = true;
 	

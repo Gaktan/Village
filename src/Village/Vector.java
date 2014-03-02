@@ -1,5 +1,6 @@
 package Village;
 
+
 public class Vector {
 	
 	private float x, y;

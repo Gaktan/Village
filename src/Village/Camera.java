@@ -1,5 +1,6 @@
 package Village;
 
+
 import static org.lwjgl.opengl.GL11.glTranslatef;
 
 public class Camera extends Entity{

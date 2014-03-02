@@ -1,5 +1,6 @@
 package Village;
 
+
 public class ChartPoint extends Point{
 	
 	private Point renderPosition;

@@ -1,5 +1,6 @@
 package Village;
 
+
 import org.newdawn.slick.Color;
 
 public class Villager extends Entity{

@@ -1,5 +1,6 @@
 package Village;
 
+
 public class Point {
 	
 	private float x, y;
