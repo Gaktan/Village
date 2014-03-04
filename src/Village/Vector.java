@@ -75,6 +75,10 @@ public class Vector {
 	public void setY(float y) {
 		this.y = y;
 	}
+	@Override
+	public String toString() {
+		return "(" + x + ", " + y + ")";
+	}
 	
 	
 }

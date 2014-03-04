@@ -90,7 +90,6 @@ public class VillageList {
 		return false;
 	}
 	
-	
 	public boolean isDisplayNames() {
 		return displayNames;
 	}

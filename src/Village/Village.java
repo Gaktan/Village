@@ -1,6 +1,5 @@
 package Village;
 
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -21,7 +20,6 @@ public class Village extends Entity{
 	
 	private VillageList owner;
 	
-
 	public Village() {
 		this(0, 0, "Random", Color.red);
 	}
@@ -40,6 +38,7 @@ public class Village extends Entity{
 		lifeExpectancy = 80;
 		maxSize = 20;
 		growing = true;
+		setLength(maxSize); setHeight(maxSize);
 		
 		popChart = new Chart(new Point(400, 200), 800, 400);
 	}
@@ -54,14 +53,13 @@ public class Village extends Entity{
 		else
 			growing = false;
 
-		destination(v);
+		v.setDestination(v.getPosition());
 	}
 	
 	public void remVillager(Villager v){
 		population--;
 		villagerList.remove(v);
 	}
-	
 	
 	public void render(Camera cam){
 		for(Villager v : villagerList){
@@ -70,11 +68,9 @@ public class Village extends Entity{
 					v.render();
 				}
 			}
-		}
-		
+		}	
 		popChart.render(getColor());
 		
-
 		if(owner.isDisplayNames()){
 		    Quad.printScreen(getX() + getLength() + 20,  getY() + 20,  name, 1);
 		    Quad.printScreen(getX() + getLength() + 20,  getY() + 40,  ""+population, 0);
@@ -84,7 +80,7 @@ public class Village extends Entity{
 	public void update(float delta){
 		for(Villager v : villagerList){
 			if(v.isArrived()){
-				destination(v);
+				destination(v, null);
 			}
 			v.update(delta);
 		}
@@ -97,7 +93,7 @@ public class Village extends Entity{
 		List<Villager> temp = new ArrayList<Villager>();
 		
 		while(it.hasNext()){
-			Villager v = (Villager) it.next();
+			Villager v = it.next();
 			
 			Villager v2 = v.makeBaby();
 			if(v2 != null){
@@ -107,7 +103,8 @@ public class Village extends Entity{
 		if(!temp.isEmpty()){
 			Iterator<Villager> it2 = temp.iterator();
 			while(it2.hasNext()){
-				addVillager(it2.next());
+				Villager v2 = it2.next();
+				addVillager(v2);
 			}
 		}
 		popChart.addValue(population);
@@ -148,6 +145,13 @@ public class Village extends Entity{
 			Villager v = (Villager) it.next();
 			v.setHealth(v.getHealth() + 1);
 			
+			if(v.getHealth() == 18){
+				if(!v.isDude())
+					v.setColor(new Color(Color.pink));
+				else
+					v.setColor(new Color(0, 0.5f, 1));
+			}
+			
 			int x = v.getHealth() + (int) (Math.random() * (lifeExpectancy - v.getHealth()));
 			if(x == v.getHealth()){
 				it.remove();
@@ -159,27 +163,31 @@ public class Village extends Entity{
 				}
 			}
 		}
-
 	}
 	
 	public Point randomCoordInVillage(){		
 		float x = Random.randFloat(getX(), getX() + getLength());
 		float y = Random.randFloat(getY(), getY() + getHeight());
+//		System.out.println("GET Y : " + getY() + " Get hrigh : " + getHeight());
+//		System.out.println("Random coord : " +new Point(x, y));
 		
 		return new Point(x, y);
 	}
 	
-	public void destination(Villager v){
+	public void destination(Villager v, Point p){
 		
-		v.setDestination(randomCoordInVillage());
+		if(p == null)
+			v.setDestination(randomCoordInVillage());
+		else
+			v.setDestination(p);
+
 		Vector a = Point.bToA(v.getDestination(), v.getPosition());
 		a.setX(a.getX() * v.getMAX_VELOCITY());
 		a.setY(a.getY() * v.getMAX_VELOCITY());
-		v.setVelocity(a);
-		v.setTimeToMove(600);
+		v.setVelocity(a);	
+		v.setTimeToMove(6000);
+		v.setArrived(false);
 	}
-	
-	
 	
 	public int getPopulation() {
 		return population;
@@ -228,7 +236,4 @@ public class Village extends Entity{
 	public void setOwner(VillageList owner) {
 		this.owner = owner;
 	}
-	
-	
-	
 }

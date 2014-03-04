@@ -41,7 +41,8 @@ public class Main {
  
 		glShadeModel(GL_SMOOTH);        
 		glDisable(GL_DEPTH_TEST);
-		glDisable(GL_LIGHTING);                    
+		glDisable(GL_LIGHTING);
+		Display.setVSyncEnabled(false);
  
 		glClearColor(0.0f, 0.0f, 0.0f, 0.0f);                
         glClearDepth(1);                                       
@@ -86,7 +87,7 @@ public class Main {
 	menu = new RightClickMenu(new Point(0, 0), 0, 150, 10);
 	menu.addOption(new Option("Create Village"));
 	menu.addOption(new Option("Remove Village"));
-	menu.addOption(new Option("Tu veux voir ma bite ?"));
+	menu.addOption(new Option("not yet"));
 	
 	   // keep looping round til the game ends
 	   while (GameRunning)
@@ -134,9 +135,9 @@ public class Main {
 	      
 	      Display.update();
 	      
-//	      try{
-//	    	  Thread.sleep( (lastLoopTime-System.nanoTime() + OPTIMAL_TIME)/1000000 );
-//	      }catch(IllegalArgumentException e){}
+	      try{
+	    	  Thread.sleep( (lastLoopTime-System.nanoTime() + OPTIMAL_TIME)/1000000 );
+	      }catch(IllegalArgumentException e){}
 	   }
 	}
 	

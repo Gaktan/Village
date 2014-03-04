@@ -9,7 +9,7 @@ import static org.lwjgl.opengl.GL11.*;
 public class Controls {
 	
 	private static int zoom = 0;
-	private static float camSpeed = 10;
+	private static float camSpeed = 3;
 	private static float scale = 1;
 	private static boolean display = true;
 	

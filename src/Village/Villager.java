@@ -41,13 +41,14 @@ public class Villager extends Entity{
 		arrived = false;
 		
 		if(!dude){
-			babyCoolDown = 0 + (int) (Math.random() * (10 - 0));
+			if(health >= 18)
+				babyCoolDown = 0 + (int) (Math.random() * (10 - 0));
 			this.setColor(new Color(Color.pink));
 		}
 		else{
-			babyCoolDown = -1;
 			this.setColor(new Color(0, 0.5f, 1));
 		}
+		setColor(Color.white);
 		
 		boolean rand = Random.randBool();
 		setRender(rand);
@@ -87,14 +88,16 @@ public class Villager extends Entity{
 	
 
 	public void update(float delta) {
-		timeToMove--;
 		if(isMoving()){
 			super.update(delta);
 		}
+		
+		timeToMove--;
 		int diff = 10;
 		Entity e = new Entity(destination, diff, diff, false, false);
 		if(collide(e) || timeToMove == 0){
 			arrived = true;
+			setvX(0); setvY(0);
 		}
 		
 		if(getvX() > MAX_VELOCITY){
