@@ -1,36 +1,65 @@
 package Village;
 
-
 import static org.lwjgl.opengl.GL11.glTranslatef;
 
 public class Camera extends Entity{
 	
+	private Vector VectorGoal;
+	
 	public Camera(){
 		this.setX(0);
 		this.setY(0);
-		setLength(800);
-		setHeight(600);
+		setHeight(Rendering.getHeight());
+		setLength(Rendering.getLength());
+		VectorGoal = new Vector(0, 0);
 	}
 
 	public void update(float dt){
+		
+		setvX(Vector.Approach(getVgX(), this.getvX(), dt/50));
+		setvY(Vector.Approach(getVgY(), this.getvY(), dt/50));
+		float x = getvX();
+		float y = getvY();
 
-		glTranslatef(-getvX(), -getvY(), 0);
+		glTranslatef(-x, -y, 0);
 		
+		this.setX(this.getX() + x);
+		this.setY(this.getY() + y);
 		
-		this.setX(this.getX() + getvX());
-		this.setY(this.getY() + getvY());
 	}
 	
+	
 	public Point camPos(){
-		return new Point(getLength() + getX(), getHeight() + getY());
+		return new Point(getHeight() + getX(), getLength() + getY());
 	}
 
 	public float getxCenter() {
-		return getX() + 300;
+		return getX() + getHeight() / 2;
 	}
 
 	public float getyCenter() {
-		return getY() + 400;
+		return getY() + getLength() / 2;
+	}
+
+	public Vector getVectorGoal() {
+		return VectorGoal;
+	}
+
+	public void setVectorGoal(Vector vectorGoal) {
+		VectorGoal = vectorGoal;
+	}
+	
+	public float getVgX(){
+		return VectorGoal.getX();
+	}
+	public void setVgX(float x){
+		VectorGoal.setX(x);
+	}
+	public float getVgY(){
+		return VectorGoal.getY();
+	}
+	public void setVgY(float y){
+		VectorGoal.setY(y);
 	}
 }
  

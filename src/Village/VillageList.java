@@ -14,7 +14,7 @@ public class VillageList {
 	
 	public VillageList(){
 		list = new ArrayList<Village>();
-		chartTotal = new Chart(new Point(400, 200), 800, 400);
+		chartTotal = new Chart(new Point(400, 200), true);
 		displayNames = true;
 	}
 
@@ -23,6 +23,7 @@ public class VillageList {
 		list.add(v);
 		v.setOwner(this);
 		v.render();
+		chartTotal.render(Color.white);
 	}
 	
 	public void remVillage(Village v){
@@ -59,7 +60,7 @@ public class VillageList {
 			}
 		}
 		if(!temp.isEmpty()){
-			Iterator it2 = temp.iterator();
+			Iterator<Village> it2 = temp.iterator();
 			while(it2.hasNext()){
 				list.remove(it2.next());
 			}

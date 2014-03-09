@@ -1,5 +1,6 @@
 package Village;
 
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -17,6 +18,7 @@ public class Village extends Entity{
 	private final int MAX_POP = 3000;
 	private float maxSize;
 	private boolean growing;
+	private float maxVelocity;
 	
 	private VillageList owner;
 	
@@ -40,7 +42,7 @@ public class Village extends Entity{
 		growing = true;
 		setLength(maxSize); setHeight(maxSize);
 		
-		popChart = new Chart(new Point(400, 200), 800, 400);
+		popChart = new Chart(new Point(400, 200), false);
 	}
 	
 	public void addVillager(Villager v){
@@ -63,17 +65,15 @@ public class Village extends Entity{
 	
 	public void render(Camera cam){
 		for(Villager v : villagerList){
-			if((v.getX() > cam.getX()) && (v.getX() < cam.getX() + cam.getLength())){
-				if((v.getY() > cam.getY()) && (v.getY() < cam.getY() + cam.getHeight())){
-					v.render();
-				}
+			if(cam.collide(v)){
+				v.render();
 			}
 		}	
 		popChart.render(getColor());
 		
 		if(owner.isDisplayNames()){
-		    Quad.printScreen(getX() + getLength() + 20,  getY() + 20,  name, 1);
-		    Quad.printScreen(getX() + getLength() + 20,  getY() + 40,  ""+population, 0);
+			Rendering.printScreen(getX() + getLength() + 20,  getY() + 20,  name, 1);
+			Rendering.printScreen(getX() + getLength() + 20,  getY() + 40,  ""+population, 0);
 		}
 	}
 	
@@ -84,6 +84,7 @@ public class Village extends Entity{
 			}
 			v.update(delta);
 		}
+		maxVelocity = 0.002f / getSize();		//set the max speed of villagers
 	}
 	
 	public void updateBaby(){
@@ -132,10 +133,10 @@ public class Village extends Entity{
 		Point b2 = new Point(getX() + getSize(), getY() + getSize());
 		
 		
-		Quad.drawLine(a1, a2, this.getColor());
-		Quad.drawLine(a2, b2, this.getColor());
-		Quad.drawLine(a1, b1, this.getColor());
-		Quad.drawLine(b1, b2, this.getColor());
+		Rendering.drawLine(a1, a2, this.getColor());
+		Rendering.drawLine(a2, b2, this.getColor());
+		Rendering.drawLine(a1, b1, this.getColor());
+		Rendering.drawLine(b1, b2, this.getColor());
 	}
 
 	public void updateHealth(){
@@ -144,13 +145,6 @@ public class Village extends Entity{
 		while(it.hasNext()){
 			Villager v = (Villager) it.next();
 			v.setHealth(v.getHealth() + 1);
-			
-			if(v.getHealth() == 18){
-				if(!v.isDude())
-					v.setColor(new Color(Color.pink));
-				else
-					v.setColor(new Color(0, 0.5f, 1));
-			}
 			
 			int x = v.getHealth() + (int) (Math.random() * (lifeExpectancy - v.getHealth()));
 			if(x == v.getHealth()){
@@ -168,8 +162,6 @@ public class Village extends Entity{
 	public Point randomCoordInVillage(){		
 		float x = Random.randFloat(getX(), getX() + getLength());
 		float y = Random.randFloat(getY(), getY() + getHeight());
-//		System.out.println("GET Y : " + getY() + " Get hrigh : " + getHeight());
-//		System.out.println("Random coord : " +new Point(x, y));
 		
 		return new Point(x, y);
 	}
@@ -182,10 +174,9 @@ public class Village extends Entity{
 			v.setDestination(p);
 
 		Vector a = Point.bToA(v.getDestination(), v.getPosition());
-		a.setX(a.getX() * v.getMAX_VELOCITY());
-		a.setY(a.getY() * v.getMAX_VELOCITY());
+		a.setX(a.getX() * maxVelocity);
+		a.setY(a.getY() * maxVelocity);
 		v.setVelocity(a);	
-		v.setTimeToMove(6000);
 		v.setArrived(false);
 	}
 	
@@ -235,5 +226,13 @@ public class Village extends Entity{
 
 	public void setOwner(VillageList owner) {
 		this.owner = owner;
+	}
+
+	public float getMaxVelocity() {
+		return maxVelocity;
+	}
+
+	public void setMaxVelocity(float maxVelocity) {
+		this.maxVelocity = maxVelocity;
 	}
 }

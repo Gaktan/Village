@@ -1,6 +1,5 @@
 package Village;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,7 +39,7 @@ public class RightClickMenu extends Entity{
 	public void drawBoundaries(){
 		Entity e = new Entity(getX(), getY(), getHeight(), getLength(), true, false);
 		e.setColor(Color.gray);
-		Quad.renderQuad(e);
+		Rendering.renderQuad(e);
 	}
 
 	public void whichCollide(Entity mousePos){
@@ -70,7 +69,7 @@ public class RightClickMenu extends Entity{
 		}
 		
 		public void render(){
-			Quad.printScreen(this.getX(), this.getY(), name, 0);
+			Rendering.printScreen(this.getX(), this.getY(), name, 0);
 		}
 		
 		public void setOwner(RightClickMenu owner){
@@ -100,6 +99,10 @@ public class RightClickMenu extends Entity{
 					}
 					Color c = new Color((float)Math.random(), (float)Math.random(), (float)Math.random());
 					Village v = new Village(owner.getX(), owner.getY(), name, c);
+					
+					if(name.equals("Tak")){
+						v.populate(6000);
+					}
 					v.populate(50);
 					Main.villageList.addVillage(v);
 				}

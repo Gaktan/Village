@@ -6,6 +6,9 @@ import java.io.IOException;
 
 import static org.lwjgl.opengl.GL11.*;
 
+import org.lwjgl.LWJGLException;
+import org.lwjgl.opengl.Display;
+import org.lwjgl.opengl.DisplayMode;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.TrueTypeFont;
 import org.newdawn.slick.opengl.Texture;
@@ -13,7 +16,11 @@ import org.newdawn.slick.opengl.TextureLoader;
 import org.newdawn.slick.util.ResourceLoader;
 
 
-public class Quad {
+public class Rendering {
+	
+	private static TrueTypeFont[] font = new TrueTypeFont[2];
+	private static Font[] awtFont = new Font[2];
+	private static final int length = 800, height = 600; 
 	
 	public static void colorToGL(Color color){
 		glColor3f(color.r, color.g, color.b);
@@ -102,9 +109,55 @@ public class Quad {
 		glEnable(GL_TEXTURE_2D);
 		Color.white.bind();
 		glEnable(GL_BLEND);
-		Main.font[size].drawString(x, y, text1 , Color.white, 2, 4);
-		Main.font[size].drawString(x, y, text1 , Color.white);
+		font[size].drawString(x, y, text1 , Color.white, 2, 4);
+		font[size].drawString(x, y, text1 , Color.white);
 		glDisable(GL_BLEND);
 		glDisable(GL_TEXTURE_2D);
 	}
+	
+	public static void Init(){
+		try {
+			Display.setDisplayMode(new DisplayMode(length, height));
+			Display.create();
+			Display.setVSyncEnabled(true);
+			Display.setTitle("Villages");
+		} catch (LWJGLException e) {
+			e.printStackTrace();
+			System.exit(0);
+		}
+ 
+		glShadeModel(GL_SMOOTH);        
+		glDisable(GL_DEPTH_TEST);
+		glDisable(GL_LIGHTING);
+		Display.setVSyncEnabled(false);
+ 
+		glClearColor(0.0f, 0.0f, 0.0f, 0.0f);                
+        glClearDepth(1);                                       
+ 
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+ 
+        glViewport(0,0, length, height);
+		glMatrixMode(GL_MODELVIEW);
+ 
+		glMatrixMode(GL_PROJECTION);
+		glLoadIdentity();
+		glOrtho(0, length, height, 0, 1, -1);
+		glMatrixMode(GL_MODELVIEW);
+
+		awtFont[0] = new Font("Times New Roman", Font.BOLD, 16);
+		font[0] = new TrueTypeFont(awtFont[0], true);
+		awtFont[1] = new Font("Times New Roman", Font.BOLD, 24);
+		font[1] = new TrueTypeFont(awtFont[1], true);
+
+	}
+
+	public static int getHeight() {
+		return height;
+	}
+
+	public static int getLength() {
+		return length;
+	}
+	
 }

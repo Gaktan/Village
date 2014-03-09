@@ -19,16 +19,16 @@ public class Controls {
 		{
 		    if (Keyboard.getEventKeyState()) {
 		        if (Keyboard.getEventKey() == Keyboard.KEY_RIGHT){
-					camera.setvX(camSpeed);
+					camera.setVgX(camSpeed);
 		        }
 		        if (Keyboard.getEventKey() == Keyboard.KEY_LEFT){
-		        	camera.setvX(-camSpeed);
+		        	camera.setVgX(-camSpeed);
 		        }	        	
 		        if (Keyboard.getEventKey() == Keyboard.KEY_UP){
-		        	camera.setvY(-camSpeed);
+		        	camera.setVgY(-camSpeed);
 		        }  
 		        if (Keyboard.getEventKey() == Keyboard.KEY_DOWN){
-		        	camera.setvY(camSpeed);
+		        	camera.setVgY(camSpeed);
 		        }
 		        if(Keyboard.getEventKey() == Keyboard.KEY_ESCAPE){
 		        	System.out.println("Stopping process...");
@@ -38,8 +38,6 @@ public class Controls {
 		        	Main.speed = true;
 		        }
 		        if(Keyboard.getEventKey() == Keyboard.KEY_RETURN){
-//		        	Main.loue.clear();
-//		        	Main.loue.populate(200);
 		        	System.out.println(Random.randName());
 		        }
 		        if(Keyboard.getEventKey() == Keyboard.KEY_A){
@@ -55,16 +53,16 @@ public class Controls {
 		    }
 		    else {
 		        if (Keyboard.getEventKey() == Keyboard.KEY_RIGHT){
-		        	camera.setvX(0);
+		        	camera.setVgX(0);
 		        }
 		        if (Keyboard.getEventKey() == Keyboard.KEY_LEFT){
-		        	camera.setvX(0);
+		        	camera.setVgX(0);
 		        }	        	
 		        if (Keyboard.getEventKey() == Keyboard.KEY_UP){
-		        	camera.setvY(0);
+		        	camera.setVgY(0);
 		        }  
 		        if (Keyboard.getEventKey() == Keyboard.KEY_DOWN){
-		        	camera.setvY(0);
+		        	camera.setVgY(0);
 		        }
 		        if(Keyboard.getEventKey() == Keyboard.KEY_SPACE){
 		        	Main.speed = false;
@@ -99,14 +97,14 @@ public class Controls {
 	        boolean set = false;
 	        if (dWheel < 0) {
 		        if(zoom < 3){
-		        	zoomFactor = 0.5f;
+		        	zoomFactor = 0.8f;
 		        	set = true;
 		        	zoom++;
 		        	scale *= zoomFactor;
 		        }
 	        } else if (dWheel > 0){
 		        if(zoom > 0){
-		        	zoomFactor = 2;
+		        	zoomFactor = 1.25f;
 		        	set = true;
 		        	zoom--;
 		        	scale *= zoomFactor;
@@ -115,38 +113,24 @@ public class Controls {
 	        
 	        if(set){
 	        	camSpeed /= zoomFactor;
+	        	
 	        	camera.setHeight(camera.getHeight() / zoomFactor);
 	        	camera.setLength(camera.getLength() / zoomFactor);
-	        	
 	        	
 	        	glTranslated(camera.getX(), camera.getY(), 1);
 	        	glScaled(zoomFactor, zoomFactor, 1);
 	        	glTranslated(-camera.getX(), -camera.getY(), -1);
-	        	
-	        	//glTranslatef(oldPos.getX(), oldPos.getY(), 0);
-	        	if(camera.getvY() > 0)
-	        		camera.setvY(camSpeed);
-	        	if(camera.getvY() < 0)
-	        		camera.setvY(-camSpeed);
-	        	if(camera.getvX() > 0)
-	        		camera.setvX(camSpeed);
-	        	if(camera.getvX() < 0)
-	        		camera.setvX(-camSpeed);
+
 	        }
 		}
 	}
+	
 	public static Point getMousePos(Camera camera){
 		float x = (camera.getX() + (Mouse.getX()/scale));
 		float y = (camera.getY() - Mouse.getY()/scale);
 		
-		float xToScale = x / camera.getLength();
-		float yToScale = y / camera.getHeight();
+		y = y + camera.getHeight();
 		
-		x = camera.getLength() * xToScale;
-		y = camera.getHeight() * yToScale;
-		
-		y = camera.getLength() + y -(200/scale);
-
 		return new Point(x, y);
 	}
 }

@@ -33,7 +33,7 @@ public class Entity {
 
 	public void render(){
 		if(render){
-			Quad.renderQuad(this);
+			Rendering.renderQuad(this);
 		}
 	}
 

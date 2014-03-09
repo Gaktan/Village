@@ -9,24 +9,38 @@ import org.newdawn.slick.Color;
 
 public class Chart {
 
-	private int i = 0;
+	private int i;
 	private float x, y;
 	private List<ChartPoint> list;
-	private static float height, length;
+	private final float HEIGHT = 400, LENGTH = 800;
 	private static float maxValue;
+	private boolean global;
+	private static int iGlobal;
 	
-	public Chart(Point position, float length, float height){
+	public Chart(Point position, boolean global){
 		x = position.getX();
 		y = position.getY();
 		list = new ArrayList<ChartPoint>();
 		i = 0;
-		this.height = height;
-		this.length = length;
 		maxValue = 0;
+		this.global = global;
+		
+		if(global){
+			iGlobal = i;
+		}
+		if(iGlobal != i){
+			init();
+		}
 	}
 	
 	public Chart(){
-		this(new Point(0, 0), 200, 200);
+		this(new Point(0, 0), false);
+	}
+	
+	public void init(){
+		for(int j = 0; j < iGlobal ; j+= 2){
+			addValue(0);
+		}
 	}
 	
 	public void addValue(float f){
@@ -38,6 +52,9 @@ public class Chart {
 		p.setRx(x + i);
 		list.add(p);
 		i += 2;
+		if(global){
+			iGlobal += 2;
+		}
 	}
 	
 	public void render(Color color){
@@ -46,27 +63,30 @@ public class Chart {
 			ChartPoint previous = list.get(0);
 			for(ChartPoint p : list){
 				p.setRy(scaled(p.getY() - y, y));
-				Quad.drawLine(p.getRenderPosition(), previous.getRenderPosition(), color);
+				Rendering.drawLine(p.getRenderPosition(), previous.getRenderPosition(), color);
 				
 				previous = p;
 			}
 		}
-		Quad.drawLine(new Point(x, y), new Point(x, y - height), Color.white);
-		Quad.drawLine(new Point(x, y), new Point(x + length, y), Color.white);
+		Rendering.drawLine(new Point(x, y), new Point(x, y - HEIGHT), Color.white);
+		Rendering.drawLine(new Point(x, y), new Point(x + LENGTH, y), Color.white);
 
-		Quad.drawLine(new Point(x, y - height), arrow(new Point(x, y - height), -1, 1), Color.white);
-		Quad.drawLine(new Point(x, y - height), arrow(new Point(x, y - height), 1, 1), Color.white);
+		Rendering.drawLine(new Point(x, y - HEIGHT), arrow(new Point(x, y - HEIGHT), -1, 1), Color.white);
+		Rendering.drawLine(new Point(x, y - HEIGHT), arrow(new Point(x, y - HEIGHT), 1, 1), Color.white);
 		
-		Quad.drawLine(new Point(x + length, y), arrow(new Point(x + length, y), -1, -1), Color.white);
-		Quad.drawLine(new Point(x + length, y), arrow(new Point(x + length, y), -1, 1), Color.white);
+		Rendering.drawLine(new Point(x + LENGTH, y), arrow(new Point(x + LENGTH, y), -1, -1), Color.white);
+		Rendering.drawLine(new Point(x + LENGTH, y), arrow(new Point(x + LENGTH, y), -1, 1), Color.white);
 	}
 	
 	public float scaled(float f, float dist){
-		return ((f / maxValue) * height) + dist;
+		return ((f / maxValue) * HEIGHT) + dist;
 	}
 	
 	public void shift(){
-		if(i > length){
+		if(i > LENGTH){
+			if(global){
+				iGlobal -= 2;
+			}
 			i -= 2;
 			Iterator<ChartPoint> it = list.iterator();
 			ChartPoint rem = null;

@@ -48,16 +48,15 @@ public class Vector {
 	public static float Approach(float goal, float current, float dt){
 		
 		float difference = goal - current;
-		
 		if(difference > dt)
 			return current + dt;
 		if(difference < -dt)
 			return current - dt;
-		
+
 		return goal;
 	}
 	
-	/**
+	/*
 	 * 
 	 * GET SET
 	 * 
