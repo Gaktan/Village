@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.lwjgl.util.vector.Vector2f;
 import org.newdawn.slick.Color;
 
 public class VillageList {
@@ -14,7 +15,7 @@ public class VillageList {
 	
 	public VillageList(){
 		list = new ArrayList<Village>();
-		chartTotal = new Chart(new Point(400, 200), true);
+		chartTotal = new Chart(new Vector2f(400, 200), true);
 		displayNames = true;
 	}
 
@@ -23,7 +24,6 @@ public class VillageList {
 		list.add(v);
 		v.setOwner(this);
 		v.render();
-		chartTotal.render(Color.white);
 	}
 	
 	public void remVillage(Village v){
@@ -79,7 +79,7 @@ public class VillageList {
 			v.render(cam);
 			v.drawBoundaries();
 		}
-		chartTotal.render(Color.white);
+		chartTotal.render(cam, Color.white);
 	}
 
 	public boolean sameName(String str){

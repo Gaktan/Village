@@ -1,24 +1,26 @@
 package Village;
 
+import org.lwjgl.util.vector.Vector2f;
 
-public class ChartPoint extends Point{
+
+public class ChartPoint extends Vector2f{
 	
-	private Point renderPosition;
+	private Vector2f renderPosition;
 	
-	public ChartPoint(Point position) {
+	public ChartPoint(Vector2f position) {
 		this(position.getX(), position.getY());
 	}
 
 	public ChartPoint(float x, float y) {
 		super(x, y);
-		this.renderPosition = new Point(0, 0);
+		this.renderPosition = new Vector2f(0, 0);
 	}
 
-	public Point getRenderPosition() {
+	public Vector2f getRenderPosition() {
 		return renderPosition;
 	}
 
-	public void setRenderPosition(Point renderPosition) {
+	public void setRenderPosition(Vector2f renderPosition) {
 		this.renderPosition = renderPosition;
 	}
 	

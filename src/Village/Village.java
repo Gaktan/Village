@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.lwjgl.util.vector.Vector2f;
 import org.newdawn.slick.Color;
 
 public class Village extends Entity{
@@ -27,10 +28,10 @@ public class Village extends Entity{
 	}
 
 	public Village(float x, float y, String name, Color color) {
-		this(new Point(x, y), name, color);
+		this(new Vector2f(x, y), name, color);
 	}
 
-	public Village(Point position, String name, Color color) {
+	public Village(Vector2f position, String name, Color color) {
 		super(position, 0, 0, false, false);
 		this.name = name;
 		setColor(color);
@@ -42,7 +43,7 @@ public class Village extends Entity{
 		growing = true;
 		setLength(maxSize); setHeight(maxSize);
 		
-		popChart = new Chart(new Point(400, 200), false);
+		popChart = new Chart(new Vector2f(400, 200), false);
 	}
 	
 	public void addVillager(Villager v){
@@ -69,7 +70,7 @@ public class Village extends Entity{
 				v.render();
 			}
 		}	
-		popChart.render(getColor());
+		popChart.render(cam, getColor());
 		
 		if(owner.isDisplayNames()){
 			Rendering.printScreen(getX() + getLength() + 20,  getY() + 20,  name, 1);
@@ -127,10 +128,10 @@ public class Village extends Entity{
 	}
 	
 	public void drawBoundaries(){
-		Point a1 = getPosition();
-		Point a2 = new Point(getX() + getSize(), getY());
-		Point b1 = new Point(getX(), getY() + getSize());
-		Point b2 = new Point(getX() + getSize(), getY() + getSize());
+		Vector2f a1 = getPosition();
+		Vector2f a2 = new Vector2f(getX() + getSize(), getY());
+		Vector2f b1 = new Vector2f(getX(), getY() + getSize());
+		Vector2f b2 = new Vector2f(getX() + getSize(), getY() + getSize());
 		
 		
 		Rendering.drawLine(a1, a2, this.getColor());
@@ -159,25 +160,33 @@ public class Village extends Entity{
 		}
 	}
 	
-	public Point randomCoordInVillage(){		
+	public Vector2f randomCoordInVillage(){		
 		float x = Random.randFloat(getX(), getX() + getLength());
 		float y = Random.randFloat(getY(), getY() + getHeight());
 		
-		return new Point(x, y);
+		return new Vector2f(x, y);
 	}
 	
-	public void destination(Villager v, Point p){
+	public void destination(Villager v, Vector2f p){
 		
 		if(p == null)
 			v.setDestination(randomCoordInVillage());
 		else
 			v.setDestination(p);
 
-		Vector a = Point.bToA(v.getDestination(), v.getPosition());
+		Vector2f a = bToA(v.getDestination(), v.getPosition());
 		a.setX(a.getX() * maxVelocity);
 		a.setY(a.getY() * maxVelocity);
 		v.setVelocity(a);	
 		v.setArrived(false);
+	}
+	
+	public Vector2f bToA(Vector2f destination, Vector2f position){
+		
+		float x = destination.x - position.x;
+		float y = destination.y - position.y;
+		
+		return new Vector2f(x, y);
 	}
 	
 	public int getPopulation() {

@@ -1,34 +1,35 @@
 package Village;
 
 
+import org.lwjgl.util.vector.Vector2f;
 import org.newdawn.slick.Color;
 
 public class Entity {
 
-	private Point position;
+	private Vector2f position;
 	private float height;
 	private float length;
 	private boolean render;
 	private boolean moving;
-	private Vector velocity;
+	private Vector2f velocity;
 	private Color color;
 	
-	public Entity(Point position, float height, float length, boolean render, boolean moving) {
+	public Entity(Vector2f position, float height, float length, boolean render, boolean moving) {
 		super();
 		this.position = position;
 		this.render = render;
 		this.moving = moving;
 		this.height = height;
 		this.length = length;
-		this.velocity = new Vector(0, 0);
+		this.velocity = new Vector2f(0, 0);
 		color = new Color(Color.white);
 	}
 	public Entity(float x, float y, float height, float length, boolean render, boolean moving) {
-		this(new Point(x, y), height, length, render, moving);
+		this(new Vector2f(x, y), height, length, render, moving);
 	}
 	
 	public Entity(){
-		this(new Point(0,0), 0, 0, false, false);
+		this(new Vector2f(0,0), 0, 0, false, false);
 	}
 
 	public void render(){
@@ -59,6 +60,21 @@ public class Entity {
 		
 		return false;
 	}
+	public boolean collide(Vector2f point, Vector2f point2){
+		
+		if(		((getX() <= point.getX())					&& (getX() + getLength() >= point.getX()))
+			|| 	((getX() <= point.getX() + point2.getX()) 	&& (getX() + getLength() >= point.getX() + point2.getX()))){
+			
+			if(		((getY() <= point.getY())					&& (getY() + getHeight() >= point.getY()))
+					|| 	((getY() <= point.getY() + point2.getY()) 	&& (getY() + getHeight() >= point.getY() + point2.getY()))){
+					
+						return true;
+					}
+			}
+		
+		
+		return false;
+	}
 	
 	public float getSize(){
 		return getHeight();
@@ -80,11 +96,11 @@ public class Entity {
 		position.setY(y);
 	}
 	
-	public Point getPosition() {
+	public Vector2f getPosition() {
 		return position;
 	}
 
-	public void setPosition(Point position) {
+	public void setPosition(Vector2f position) {
 		this.position = position;
 	}
 
@@ -108,11 +124,11 @@ public class Entity {
 		this.render = render;
 	}
 
-	public Vector getVelocity() {
+	public Vector2f getVelocity() {
 		return velocity;
 	}
 
-	public void setVelocity(Vector velocity) {
+	public void setVelocity(Vector2f velocity) {
 		this.velocity = velocity;
 	}
 	

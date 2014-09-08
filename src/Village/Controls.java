@@ -3,6 +3,7 @@ package Village;
 
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
+import org.lwjgl.util.vector.Vector2f;
 
 import static org.lwjgl.opengl.GL11.*;
 
@@ -125,12 +126,12 @@ public class Controls {
 		}
 	}
 	
-	public static Point getMousePos(Camera camera){
+	public static Vector2f getMousePos(Camera camera){
 		float x = (camera.getX() + (Mouse.getX()/scale));
 		float y = (camera.getY() - Mouse.getY()/scale);
 		
 		y = y + camera.getHeight();
 		
-		return new Point(x, y);
+		return new Vector2f(x, y);
 	}
 }

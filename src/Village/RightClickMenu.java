@@ -3,6 +3,7 @@ package Village;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.lwjgl.util.vector.Vector2f;
 import org.newdawn.slick.Color;
 
 public class RightClickMenu extends Entity{
@@ -10,7 +11,7 @@ public class RightClickMenu extends Entity{
 	private List<Option> options;
 	private final float OPTION_HEIGHT = 20;
 	
-	public RightClickMenu(Point position, float height, float length, int maxNumberOfOptions) {
+	public RightClickMenu(Vector2f position, float height, float length, int maxNumberOfOptions) {
 		super(position, height, length, true, false);
 		setHeight(height);
 		setLength(length);
@@ -26,7 +27,7 @@ public class RightClickMenu extends Entity{
 		setHeight(getHeight() + OPTION_HEIGHT);
 	}
 
-	public void render(Point position){
+	public void render(Vector2f position){
 		setX(position.getX()); setY(position.getY());
 		drawBoundaries();
 		for(Option o : options){

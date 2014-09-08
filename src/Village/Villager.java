@@ -1,6 +1,7 @@
 package Village;
 
 
+import org.lwjgl.util.vector.Vector2f;
 import org.newdawn.slick.Color;
 
 public class Villager extends Entity{
@@ -13,18 +14,18 @@ public class Villager extends Entity{
 	private static final int MAX_BABIES = 3;
 	private int kids;
 	
-	private Point destination;
+	private Vector2f destination;
 	private boolean arrived;
 	
 	public Villager() {
-		this(new Point(0, 0), true);
+		this(new Vector2f(0, 0), true);
 	}
 	
 	public Villager(Village vi, boolean dude){
 		this(vi.randomCoordInVillage(), dude);
 	}
 
-	public Villager(Point position, boolean dude) {
+	public Villager(Vector2f position, boolean dude) {
 		//size = 3
 		super(position, 3,3, true, true);
 		
@@ -50,7 +51,7 @@ public class Villager extends Entity{
 	}
 	
 	public Villager(float x, float y, boolean dude) {
-		this(new Point(x, y), dude);
+		this(new Vector2f(x, y), dude);
 	}
 
 	
@@ -164,11 +165,11 @@ public class Villager extends Entity{
 		this.kids = kids;
 	}
 
-	public Point getDestination() {
+	public Vector2f getDestination() {
 		return destination;
 	}
 
-	public void setDestination(Point destination) {
+	public void setDestination(Vector2f destination) {
 		this.destination = destination;
 	}
 
