@@ -10,12 +10,10 @@ import org.newdawn.slick.Color;
 
 public class VillageList {
 	private List<Village> list;
-	private Chart chartTotal;
 	private boolean displayNames;
 	
 	public VillageList(){
 		list = new ArrayList<Village>();
-		chartTotal = new Chart(new Vector2f(400, 200), true);
 		displayNames = true;
 	}
 
@@ -64,8 +62,7 @@ public class VillageList {
 			while(it2.hasNext()){
 				list.remove(it2.next());
 			}
-		}
-		chartTotal.addValue(value);		
+		}	
 	}
 	
 	public void update(float delta){
@@ -79,7 +76,6 @@ public class VillageList {
 			v.render(cam);
 			v.drawBoundaries();
 		}
-		chartTotal.render(cam, Color.white);
 	}
 
 	public boolean sameName(String str){

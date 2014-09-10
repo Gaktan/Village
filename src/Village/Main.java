@@ -18,6 +18,8 @@ public class Main {
 	public static Vector2f mousePos;
 
 	public static VillageList villageList;
+	
+	public static ChartGraph chart;
 
 	public static void gameLoop() throws InterruptedException
 	{
@@ -26,6 +28,8 @@ public class Main {
 		long lastLoopTime = System.nanoTime();
 		final int TARGET_FPS = 900;
 		final long OPTIMAL_TIME = 1000000000 / TARGET_FPS;	//1000000000
+		
+		chart = new ChartGraph(new Vector2f(500, 300), 600, 800, 2);
 
 		Village vallon = new Village(20, 20, "Vallon sur gée", Color.red);
 		Village loue = new Village(20, 350, "Loué", Color.green);
@@ -72,10 +76,12 @@ public class Main {
 
 				if(!speed){
 					villageList.updateStat();
+					chart.update();
 				}
 			}
 			if(speed){
 				villageList.updateStat();
+				chart.update();
 			}
 
 			update(delta);
@@ -100,6 +106,8 @@ public class Main {
 		// Clear the color information.
 		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
 
+		chart.render(camera);
+		
 		villageList.render(camera);
 
 		if(rMenu){

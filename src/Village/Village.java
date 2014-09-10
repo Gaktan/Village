@@ -9,20 +9,20 @@ import org.lwjgl.util.vector.Vector2f;
 import org.newdawn.slick.Color;
 
 public class Village extends Entity{
-	
+
 	private List<Villager> villagerList;
 	private int population;
 	private String name;
 	private int lifeExpectancy;
-	private Chart popChart;
+	private ChartData popChart;
 	private final float SIZE_LIM = 350;
 	private final int MAX_POP = 3000;
 	private float maxSize;
 	private boolean growing;
 	private float maxVelocity;
-	
+
 	private VillageList owner;
-	
+
 	public Village() {
 		this(0, 0, "Random", Color.red);
 	}
@@ -35,17 +35,18 @@ public class Village extends Entity{
 		super(position, 0, 0, false, false);
 		this.name = name;
 		setColor(color);
-		
+
 		villagerList = new ArrayList<Villager>();
 		population = 0;
 		lifeExpectancy = 80;
 		maxSize = 20;
 		growing = true;
 		setLength(maxSize); setHeight(maxSize);
-		
-		popChart = new Chart(new Vector2f(400, 200), false);
+
+		popChart = new ChartData(Main.chart, color);
+		Main.chart.addChartData(popChart);
 	}
-	
+
 	public void addVillager(Villager v){
 		population++;
 		villagerList.add(v);
@@ -58,26 +59,24 @@ public class Village extends Entity{
 
 		v.setDestination(v.getPosition());
 	}
-	
+
 	public void remVillager(Villager v){
 		population--;
 		villagerList.remove(v);
 	}
-	
+
 	public void render(Camera cam){
 		for(Villager v : villagerList){
 			if(cam.collide(v)){
 				v.render();
 			}
 		}	
-		popChart.render(cam, getColor());
-		
 		if(owner.isDisplayNames()){
 			Rendering.printScreen(getX() + getLength() + 20,  getY() + 20,  name, 1);
 			Rendering.printScreen(getX() + getLength() + 20,  getY() + 40,  ""+population, 0);
 		}
 	}
-	
+
 	public void update(float delta){
 		for(Villager v : villagerList){
 			if(v.isArrived()){
@@ -87,16 +86,16 @@ public class Village extends Entity{
 		}
 		maxVelocity = 0.002f / getSize();		//set the max speed of villagers
 	}
-	
+
 	public void updateBaby(){
 		setHeight(maxSize); setLength(maxSize);
-		
+
 		Iterator<Villager> it = villagerList.iterator();
 		List<Villager> temp = new ArrayList<Villager>();
-		
+
 		while(it.hasNext()){
 			Villager v = it.next();
-			
+
 			Villager v2 = v.makeBaby();
 			if(v2 != null){
 				temp.add(v2);
@@ -111,7 +110,7 @@ public class Village extends Entity{
 		}
 		popChart.addValue(population);
 	}
-	
+
 	public void populate(int amount){
 		Villager v;
 		boolean dude;
@@ -121,19 +120,19 @@ public class Village extends Entity{
 			addVillager(v);
 		}
 	}
-	
+
 	public void clear(){
 		villagerList.clear();
 		population = 0;
 	}
-	
+
 	public void drawBoundaries(){
 		Vector2f a1 = getPosition();
 		Vector2f a2 = new Vector2f(getX() + getSize(), getY());
 		Vector2f b1 = new Vector2f(getX(), getY() + getSize());
 		Vector2f b2 = new Vector2f(getX() + getSize(), getY() + getSize());
-		
-		
+
+
 		Rendering.drawLine(a1, a2, this.getColor());
 		Rendering.drawLine(a2, b2, this.getColor());
 		Rendering.drawLine(a1, b1, this.getColor());
@@ -141,12 +140,12 @@ public class Village extends Entity{
 	}
 
 	public void updateHealth(){
-		
+
 		Iterator<Villager> it = villagerList.iterator();
 		while(it.hasNext()){
 			Villager v = (Villager) it.next();
 			v.setHealth(v.getHealth() + 1);
-			
+
 			int x = v.getHealth() + (int) (Math.random() * (lifeExpectancy - v.getHealth()));
 			if(x == v.getHealth()){
 				it.remove();
@@ -159,16 +158,16 @@ public class Village extends Entity{
 			}
 		}
 	}
-	
+
 	public Vector2f randomCoordInVillage(){		
 		float x = Random.randFloat(getX(), getX() + getLength());
 		float y = Random.randFloat(getY(), getY() + getHeight());
-		
+
 		return new Vector2f(x, y);
 	}
-	
+
 	public void destination(Villager v, Vector2f p){
-		
+
 		if(p == null)
 			v.setDestination(randomCoordInVillage());
 		else
@@ -180,15 +179,15 @@ public class Village extends Entity{
 		v.setVelocity(a);	
 		v.setArrived(false);
 	}
-	
+
 	public Vector2f bToA(Vector2f destination, Vector2f position){
-		
+
 		float x = destination.x - position.x;
 		float y = destination.y - position.y;
-		
+
 		return new Vector2f(x, y);
 	}
-	
+
 	public int getPopulation() {
 		return population;
 	}
